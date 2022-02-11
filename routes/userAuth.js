@@ -117,14 +117,16 @@ router.post("/login", async (request, response) => {
       if (!user) {
         return response.json({ message: "Invalid Credentials" });
       }
-      if(user.active == false){
-          return response.json({ message: "Account not activated"})
+      if (user.active == false) {
+        return response.json({ message: "Account not activated" });
       }
       bcrypt.compare(password, user.password).then((match) => {
         if (match) {
-          const jwtToken = jwt.sign({ _id: user._id }, JWT_SECRET);
+          const jwtToken = jwt.sign({ _id: user._id }, JWT_SECRET, {
+            expiresIn: "1h",
+          });
           const { _id, email, name } = user;
-          response.json({ jwtToken, name: name, email: email });
+          response.json({ jwtToken, name: name, email: email, id: _id });
         } else {
           return response.json({ message: "Invalid Credentials" });
         }
@@ -192,23 +194,23 @@ router.post("/new-password", async (request, response) => {
 });
 
 router.get("/activate/:token", async (request, response) => {
-    const token = request.params.token;
-    User.findOne({activationToken: token}).then(user => {
-        if(user){
-            user.active = true,
-            user.activationToken = null
-            user.save().then(() => {
-                const driveContent = new DriveContent({
-                    userId: user._id
-                  })
-                  driveContent.save()
-                response.send("Account activated please close this page and login to your account")
-            })
-        }
-        else{
-            response.send("User not found")
-        }
-    })
-})
+  const token = request.params.token;
+  User.findOne({ activationToken: token }).then((user) => {
+    if (user) {
+      (user.active = true), (user.activationToken = null);
+      user.save().then(() => {
+        const driveContent = new DriveContent({
+          userId: user._id,
+        });
+        driveContent.save();
+        response.send(
+          "Account activated please close this page and login to your account"
+        );
+      });
+    } else {
+      response.send("User not found");
+    }
+  });
+});
 
 module.exports = router;

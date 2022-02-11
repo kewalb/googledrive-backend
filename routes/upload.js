@@ -6,15 +6,15 @@ const router = Express.Router();
 
 
 
-router.post("/upload", (request, response) => {
+router.post("/upload/:id", (request, response) => {
     const file = request.files.file;
-    const id = request.body.id
+    const id = request.params.id
     const status = uploadToS3(file, response, id)
 })
 
-router.post("/create-folder", (request, response) => {
+router.post("/create-folder/:id", (request, response) => {
     const folderName = request.body.name;
-    const id = request.body.id
+    const id = request.params.id
     createFolder(folderName, response, id)
 })
 

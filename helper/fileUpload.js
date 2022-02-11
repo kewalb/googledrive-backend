@@ -2,7 +2,7 @@ const AWS = require("aws-sdk");
 const env = require("dotenv");
 const DriveContent = require("../models/folder");
 const mongoose = require("mongoose");
-const user = require("../models/user");
+const User = require("../models/user");
 ObjectId = require("mongodb").ObjectID;
 
 env.config();
@@ -13,9 +13,6 @@ const ACCESS_KEY_ID = process.env.ACCESS_KEY_ID;
 const SECRET_ACCESS_KEY = process.env.SECRET_ACCESS_KEY;
 
 function addToDb(name, id) {
-  console.log(typeof id);
-  userId = mongoose.Types.ObjectId(id);
-  console.log(userId);
   DriveContent.findOne({ userId: id }).then((data) => {
     const id = data._id
     DriveContent.findByIdAndUpdate(id, { $push: { files: name } }, (error, updatedData) => {
@@ -28,7 +25,6 @@ function addToDb(name, id) {
     })
   }
   );
-
   // DriveContent.findByIdAndUpdate({userId: ObjectId(id)}, {$push: {files: name}}, (error, updatedData) => {
   //   if (error) {
   //     // response.json({ message: "Failed to update" });
@@ -42,6 +38,7 @@ function addToDb(name, id) {
 
 // function to upload file in S3 bucket using aws-sdk
 module.exports = function (file, response, id) {
+  console.log(id)
   let s3bucket = new AWS.S3({
     accessKeyId: ACCESS_KEY_ID,
     secretAccessKey: SECRET_ACCESS_KEY,
