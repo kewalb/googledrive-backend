@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const driveContentSchema = new mongoose.Schema({
   userId: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
   },
   folders: {

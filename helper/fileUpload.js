@@ -13,6 +13,7 @@ const ACCESS_KEY_ID = process.env.ACCESS_KEY_ID;
 const SECRET_ACCESS_KEY = process.env.SECRET_ACCESS_KEY;
 
 function addToDb(name, id) {
+  // const uid = ObjectId(id)
   DriveContent.findOne({ userId: id }).then((data) => {
     const id = data._id
     DriveContent.findByIdAndUpdate(id, { $push: { files: name } }, (error, updatedData) => {
