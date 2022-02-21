@@ -13,7 +13,7 @@ const ACCESS_KEY_ID = process.env.ACCESS_KEY_ID;
 const SECRET_ACCESS_KEY = process.env.SECRET_ACCESS_KEY;
 
 function addToDb(name, id) {
-  // const uid = ObjectId(id)
+  console.log(id)
   DriveContent.findOne({ userId: id }).then((data) => {
     const id = data._id
     DriveContent.findByIdAndUpdate(id, { $push: { files: name } }, (error, updatedData) => {
@@ -26,15 +26,6 @@ function addToDb(name, id) {
     })
   }
   );
-  // DriveContent.findByIdAndUpdate({userId: ObjectId(id)}, {$push: {files: name}}, (error, updatedData) => {
-  //   if (error) {
-  //     // response.json({ message: "Failed to update" });
-  //     console.log(error)
-  //   } else {
-  //     console.log(updatedData);
-  //     // response.json({ message: "Update successful" });
-  //   }
-  // })
 }
 
 // function to upload file in S3 bucket using aws-sdk

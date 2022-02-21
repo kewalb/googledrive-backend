@@ -9,6 +9,7 @@ const router = Express.Router();
 router.post("/upload/:id", (request, response) => {
     const file = request.files.file;
     const id = request.params.id
+    console.log("id at request", id)
     const status = uploadToS3(file, response, id)
 })
 
